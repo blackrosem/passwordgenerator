@@ -1,5 +1,9 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
+var uppers = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var lowers = 'abcdefghijklmnopqrstuvwxyz';
+var nums = '0123456789';
+var specials = '@%+\/!#$^?:(){}[]~-_.';
 
 // Write password to the #password input
 function writePassword() {
@@ -14,10 +18,7 @@ function writePassword() {
 generateBtn.addEventListener("click", writePassword);
 
 function generatePassword() {
-  var uppers = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", OPQRSTUVWXYZ"];
-  var lowers = [abcdefghijklmnopqrstuvwxyz];
-  var nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  var specials = ["@", "%", "+", "\\", "/", "'", "!", "#", "$", "^", "?", ":", ",", "(", ")", "{", "}", "[", "]", "~", "-", "_", "."];
+  
   var passlength = prompt("Password length between 8 and 128");
   while ((passlength < 8)  || (passlength > 128) || (isNaN(passlength))){
     passlength = prompt("Invalid length selected.  Password length between 8 and 128");
@@ -40,17 +41,53 @@ function generatePassword() {
   if(special == true)
     categories++;
 
-  var allocated = passlength/categories;
+  var allocated = Math.floor(passlength/categories);
   let passphrase = '';
-  console.log(lowers[1]);
+  var mystart = 0;
   
   if(lowercase == true){
-    for(let k = 0; k < allocated; k++)
-    {
+    for(let k = mystart; k < allocated; k++){
       passphrase += lowers.charAt(Math.floor(Math.random() * lowers.length));
     }
-    console.log(passphrase);
+    mystart += allocated;
+    if((uppercase == false) && (numero == false) && (special == false)){
+      for(let m = mystart; m < passlength; m++)
+      {
+        passphrase += lowers.charAt(Math.floor(Math.random() * lowers.length));
+      }
+    }
   }
 
+  if(uppercase == true){
+    for(let n = mystart; n < (allocated + mystart); n++){
+      passphrase += uppers.charAt(Math.floor(Math.random() * uppers.length));
+    }
+    mystart += allocated;
+    if((numero == false) && (special == false)){
+      for(let p = mystart; p < passlength; p++)
+      {
+        passphrase += uppers.charAt(Math.floor(Math.random() * uppers.length));
+      }
+    }
+  }
+
+  if(numero == true){
+    for(let q = mystart; q < (allocated + mystart); q++){
+      passphrase += nums.charAt(Math.floor(Math.random() * nums.length));
+    }
+    mystart += allocated;
+    if(special == false){
+      for(let r = mystart; r < passlength; r++)
+      {
+        passphrase += nums.charAt(Math.floor(Math.random() * nums.length));
+      }
+    }
+  }
+
+  if(special == true){
+    for(let t = mystart; t < passlength; t++){
+      passphrase += specials.charAt(Math.floor(Math.random() * specials.length));
+    }
+  }
   return passphrase;
 }
